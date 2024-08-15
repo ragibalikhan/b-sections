@@ -1,0 +1,214 @@
+{% schema %}
+{
+  "name": "Tab Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tab1_title",
+      "label": "Tab 1 Title",
+      "default": "Benefits of Using Millex..."
+    },
+    {
+      "type": "text",
+      "id": "tab2_title",
+      "label": "Tab 2 Title",
+      "default": "Key Ingredients"
+    },
+    {
+      "type": "text",
+      "id": "tab3_title",
+      "label": "Tab 3 Title",
+      "default": "How to Cook"
+    }
+  ],
+  "blocks": [
+    {
+        "name": "Benefits Section",
+        "settings": [
+          {
+            "type": "text",
+            "id": "section_title",
+            "label": "Section Title",
+            "default": "Our Benefits"
+          },
+          {
+            "type": "text",
+            "id": "section_subtitle",
+            "label": "Section Subtitle",
+            "default": "Why choose us"
+          },
+          {
+            "type": "number",
+            "id": "number_of_benefits",
+            "label": "Number of Benefits",
+            "default": 3,
+            "min": 1,
+            "max": 10
+          }
+        ],
+        "blocks": [
+          {
+            "type": "benefit",
+            "name": "Benefit",
+            "settings": [
+              {
+                "type": "image_picker",
+                "id": "benefit_image",
+                "label": "Benefit Image"
+              },
+              {
+                "type": "text",
+                "id": "benefit_title",
+                "label": "Benefit Title",
+                "default": "High Quality"
+              },
+              {
+                "type": "textarea",
+                "id": "benefit_description",
+                "label": "Benefit Description",
+                "default": "We offer the highest quality products."
+              }
+            ]
+          }
+        ],
+        "presets": [
+          {
+            "name": "Benefits Section",
+            "category": "Custom Sections"
+          }
+        ]
+      },
+      
+    {
+      "type": "ingredients",
+      "name": "Key Ingredients",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "ingredients_content",
+          "label": "Content",
+          "default": "<div class='upper-content-heading'>Key Ingredients Content Here...</div>"
+        }
+      ]
+    },
+    {
+      "type": "how_to_cook",
+      "name": "How to Cook",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "cook_content",
+          "label": "Content",
+          "default": "<div class='upper-content-heading'>How to Cook Content Here...</div>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tab Section",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.tab-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab {
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: 2px solid #FFA500;
+    color: #FFA500;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.tab.active {
+    background-color: #FFA500;
+    color: white;
+}
+
+.tab-content .content {
+    display: none;
+    text-align: left;
+}
+
+.tab-content .content.active {
+    display: block;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 768px) {
+    .tabs {
+        flex-direction: column;
+    }
+
+    .tab {
+        padding: 6px 8px;
+        margin: 5px 0;
+        height: 53px;
+        font-size: 12px;
+    }
+
+    .tabs {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .tab {
+        flex: 1;
+        margin: 5px;
+    }
+}
+
+/* Add your additional styles here */
+</style>
+
+<div class="tab-section">
+  <div class="tabs">
+    <div class="tab active" data-content="benefits">{{ section.settings.tab1_title }}</div>
+    <div class="tab" data-content="key-ingredients">{{ section.settings.tab2_title }}</div>
+    <div class="tab" data-content="how-to-cook">{{ section.settings.tab3_title }}</div>
+  </div>
+
+  <div class="tab-content">
+    {% for block in section.blocks %}
+      <div class="content{% if forloop.first %} active{% endif %}" id="{{ block.type }}">
+        {{ block.settings.content }}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+
+      this.classList.add('active');
+      document.getElementById(this.dataset.content).classList.add('active');
+    });
+  });
+});
+</script>

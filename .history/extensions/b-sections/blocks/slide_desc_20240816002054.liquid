@@ -1,0 +1,137 @@
+{% schema %}
+  {
+    "name": "Custom Description",
+    "target": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Section Title",
+        "default": "This is a title"
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": "Description",
+        "default": "This is a description content that will be toggled."
+      },
+      {
+        "type": "select",
+        "id": "background_type",
+        "label": "Background Type",
+        "options": [
+          {
+            "value": "gradient",
+            "label": "Gradient"
+          },
+          {
+            "value": "single",
+            "label": "Single Color"
+          }
+        ],
+        "default": "gradient"
+      },
+      {
+        "type": "color",
+        "id": "single_color",
+        "label": "Single Background Color",
+        "default": "#ffffff",
+        "info": "Used only if 'Single Color' is selected as Background Type"
+      },
+      {
+        "type": "color",
+        "id": "gradient_color_1",
+        "label": "Gradient Color 1",
+        "default": "#ffefba",
+        "info": "Used only if 'Gradient' is selected as Background Type"
+      },
+      {
+        "type": "color",
+        "id": "gradient_color_2",
+        "label": "Gradient Color 2",
+        "default": "#ffffff",
+        "info": "Used only if 'Gradient' is selected as Background Type"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app",
+        "name": "List Item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "list_item",
+            "label": "List Item Text"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+<!-- shopify-section -->
+<section class="custom-section" style="
+    {% if section.settings.background_type == 'single' %}
+        background-color: {{ section.settings.single_color }};
+    {% elsif section.settings.background_type == 'gradient' %}
+        background: linear-gradient(to right, {{ section.settings.gradient_color_1 }}, {{ section.settings.gradient_color_2 }});
+    {% endif %}
+">
+    <div class="container">
+        <h2>{{ section.settings.title }}</h2>
+        
+        {% if section.blocks.size > 0 %}
+        <ul>
+            {% for block in section.blocks %}
+            <li>{{ block.settings.list_item }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div class="description" id="description-text">
+            {{ section.settings.description }}
+        </div>
+        <a href="javascript:void(0);" id="toggle-description" onclick="toggleDescription()">Read More</a>
+    </div>
+</section>
+
+<style>
+    .custom-section {
+        width: 100%;
+        border-radius: 22px;
+        margin: 40px auto 0;
+        padding: 24px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        box-sizing: border-box;
+        max-width: 1200px;
+    } 
+    .description {
+        overflow: hidden;
+        transition: height 0.3s ease;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var description = document.getElementById('description-text');
+        var toggleLink = document.getElementById('toggle-description');
+        var shortHeight = description.scrollHeight * 0.3;
+
+        description.style.height = shortHeight + 'px';
+        toggleLink.innerText = 'Read More';
+    });
+    
+    function toggleDescription() {
+        var description = document.getElementById('description-text');
+        var toggleLink = document.getElementById('toggle-description');
+    
+        if (description.style.height !== description.scrollHeight + 'px') {
+            description.style.height = description.scrollHeight + 'px';
+            toggleLink.innerText = 'Read Less';
+        } else {
+            description.style.height = description.scrollHeight * 0.3 + 'px';
+            toggleLink.innerText = 'Read More';
+        }
+    }
+</script>

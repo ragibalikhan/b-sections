@@ -1,0 +1,99 @@
+<div class="test-tab-section">
+  <div class="test-tabs">
+    <div class="test-tab active" data-tab="0">{{section.settings.tab_1_name}}</div>
+    <div class="test-tab" data-tab="1">{{section.settings.tab_2_name}}</div>
+    <div class="test-tab" data-tab="2">{{section.settings.tab_3_name}}</div>
+  </div>
+
+  <div class="test-tab-content">
+    <div class="test-content active" id="test-tab-content-0">Content for Tab 1</div>
+    <div class="test-content" id="test-tab-content-1">Content for Tab 2</div>
+    <div class="test-content" id="test-tab-content-2">Content for Tab 3</div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.test-tab');
+    const contents = document.querySelectorAll('.test-tab-content .test-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        const target = this.getAttribute('data-tab');
+
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        this.classList.add('active');
+        document.getElementById(`test-tab-content-${target}`).classList.add('active');
+      });
+    });
+
+    // Set default active tab
+    tabs[0].click();
+  });
+</script>
+
+<style>
+  .test-tab-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .test-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .test-tab {
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: 2px solid #FFA500;
+    color: #FFA500;
+    font-weight: bold;
+  }
+
+  .test-tab.active {
+    background-color: #FFA500;
+    color: white;
+  }
+
+  .test-tab-content .test-content {
+    display: none;
+    text-align: left;
+  }
+
+  .test-tab-content .test-content.active {
+    display: block;
+  }
+</style>
+
+{% schema %}
+{   "name": "Tab",
+    "target": "section",
+    "settings": [
+    {
+      "type": "text",
+      "id": "tab_1_name",
+      "label": "Tab 1 Name",
+    },
+    {
+      "type": "text",
+      "id": "tab_2_name",
+      "label": "Tab 2 Name",
+      
+    },
+    {
+      "type": "text",
+      "id": "tab_3_name",
+      "label": "Tab 3 Name",
+   
+    }
+  ],
+  
+}
+{% endschema %}
